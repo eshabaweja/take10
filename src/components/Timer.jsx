@@ -1,11 +1,15 @@
 import { useState, useEffect, useRef } from 'react'
 import Confetti from 'react-confetti'
 
+// Utility function to generate random wind value
+const getRandomWind = () => (Math.random() * 0.8 - 0.4).toFixed(2)
+
 function Timer() {
   const [timeLeft, setTimeLeft] = useState(600) // minutes in seconds
   const [isRunning, setIsRunning] = useState(false)
   const [showStartConfetti, setShowStartConfetti] = useState(false)
   const [showEndConfetti, setShowEndConfetti] = useState(false)
+  const [wind, setWind] = useState(0)
   const audioRef = useRef(null)
   const startTimeRef = useRef(null)
 
@@ -13,7 +17,8 @@ function Timer() {
     let intervalId
     if (isRunning && timeLeft > 0) {
       startTimeRef.current = Date.now() - (600 - timeLeft) * 1000
-      // Show start confetti
+      // Show start confetti with random wind
+      setWind(getRandomWind())
       setShowStartConfetti(true)
       
       intervalId = setInterval(() => {
@@ -22,6 +27,7 @@ function Timer() {
         
         if (remaining === 0) {
           setIsRunning(false)
+          setWind(getRandomWind())
           setShowEndConfetti(true)
           audioRef.current?.play()
         }
@@ -58,8 +64,9 @@ function Timer() {
           width={window.innerWidth}
           height={window.innerHeight}
           recycle={false}
-          numberOfPieces={500}
-          gravity={0.2}
+          numberOfPieces={200}
+          wind={Number(wind)}
+          gravity={0.3}
           colors={['#FFD700', '#FFA500', '#FF69B4', '#87CEEB']}
           tweenDuration={5000}
           run={isRunning}
