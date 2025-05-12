@@ -1,24 +1,37 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import Confetti from 'react-confetti'
 
 function Timer() {
-  const [timeLeft, setTimeLeft] = useState(600) // 10 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(600) // minutes in seconds
   const [isRunning, setIsRunning] = useState(false)
+  const [showStartConfetti, setShowStartConfetti] = useState(false)
+  const [showEndConfetti, setShowEndConfetti] = useState(false)
+  const audioRef = useRef(null)
+  const startTimeRef = useRef(null)
 
   useEffect(() => {
     let intervalId
     if (isRunning && timeLeft > 0) {
+      startTimeRef.current = Date.now() - (600 - timeLeft) * 1000
+      // Show start confetti
+      setShowStartConfetti(true)
+      
       intervalId = setInterval(() => {
-        setTimeLeft((prevTime) => {
-          if (prevTime <= 0) {
-            setIsRunning(false)
-            return 0
-          }
-          return prevTime - 1
-        })
-      }, 1000)
+        const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000)
+        const remaining = Math.max(0, 600 - elapsed)
+        
+        if (remaining === 0) {
+          setIsRunning(false)
+          setShowEndConfetti(true)
+          audioRef.current?.play()
+        }
+        setTimeLeft(remaining)
+      }, 100)
+    } else if (!isRunning) {
+      setShowStartConfetti(false)
     }
     return () => clearInterval(intervalId)
-  }, [isRunning, timeLeft])
+  }, [isRunning])
 
   const toggleTimer = () => {
     setIsRunning(!isRunning)
@@ -27,6 +40,9 @@ function Timer() {
   const resetTimer = () => {
     setTimeLeft(600)
     setIsRunning(false)
+    setShowStartConfetti(false)
+    setShowEndConfetti(false)
+    startTimeRef.current = null
   }
 
   const formatTime = (seconds) => {
@@ -37,10 +53,39 @@ function Timer() {
 
   return (
     <div className="timer">
+      {showStartConfetti && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={500}
+          gravity={0.2}
+          colors={['#FFD700', '#FFA500', '#FF69B4', '#87CEEB']}
+          tweenDuration={5000}
+          run={isRunning}
+        />
+      )}
+      {showEndConfetti && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={1000}
+          gravity={0.3}
+          colors={['#FFD700', '#FFA500', '#FF69B4', '#87CEEB']}
+          tweenDuration={5000}
+          run={!isRunning}
+        />
+      )}
+      <audio
+        ref={audioRef}
+        src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"
+        preload="auto"
+      />
       <h2>{formatTime(timeLeft)}</h2>
       <div className="timer-controls">
         <button onClick={toggleTimer} disabled={timeLeft === 0}>
-          {isRunning ? 'Pause' : 'Play'}
+          {isRunning ? 'Stop' : 'Start'}
         </button>
         <button onClick={resetTimer}>Reset</button>
       </div>
