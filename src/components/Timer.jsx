@@ -91,7 +91,10 @@ function Timer() {
       />
       <h2>{formatTime(timeLeft)}</h2>
       <div className="timer-controls">
-        <button onClick={toggleTimer} disabled={timeLeft === 0}>
+        <button 
+          onClick={toggleTimer} 
+          disabled={timeLeft === 0}
+        >
           {isRunning ? 'Stop' : 'Start'}
         </button>
         <button onClick={resetTimer}>Reset</button>

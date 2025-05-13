@@ -1,5 +1,5 @@
 #root {
-  max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -34,10 +34,11 @@
 }
 
 .card {
-  padding: 2em;
   width: 100%;
-  max-width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .card form {
@@ -46,6 +47,13 @@
   gap: 1rem;
   align-items: center;
   width: 100%;
+  max-width: 30vw;
+}
+
+@media (max-width: 768px) {
+  .card form {
+    max-width: 100%;
+  }
 }
 
 .read-the-docs {
@@ -70,7 +78,6 @@
   border: 1px solid #888;
   font-size: 1em;
   width: 100%;
-  max-width: 300px;
   box-sizing: border-box;
 }
 
@@ -109,9 +116,18 @@ button:disabled {
   gap: 1rem;
 }
 
-/* Remove duplicate button styles from timer-controls since we have common button styles */
 .timer-controls button {
   margin: 0;
+}
+
+.timer-controls button:first-child {
+  background-color: rgba(100, 108, 255,0.8);
+  color: #fff;
+}
+
+.timer-controls button:first-child:hover {
+  background-color: rgba(100, 108, 255);
+  color: #fff;
 }
 
 /* AddTask Component Styles */
@@ -143,9 +159,16 @@ button:disabled {
   text-decoration: line-through;
 }
 
-.submit-button {
+.button-group {
+  display: flex;
+  gap: 1rem;
   width: 100%;
-  max-width: 300px;
+  justify-content: center;
+}
+
+.submit-button {
+  flex: 1;
+  max-width: 150px;
 }
 
 /* TaskGenerator Component Styles */
@@ -168,12 +191,20 @@ button:disabled {
   justify-content: center;
   text-align: center;
   width: 100%;
-  max-width: 300px;
+  max-width: 50vw;
+  transition: all 0.3s ease;
 }
 
 .task-display p {
   margin: 0;
-  color: #888;
+  opacity: 0;
+  transform: translateY(100px);
+  transition: all 0.3s ease;
+}
+
+.task-display p.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Home Component Styles */

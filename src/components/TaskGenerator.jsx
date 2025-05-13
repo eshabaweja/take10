@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 
-function TaskGenerator() {
+function TaskGenerator({ onTaskSelected }) {
   const [tasks, setTasks] = useState([])
   const [selectedTask, setSelectedTask] = useState(null)
+  const [isVisible, setIsVisible] = useState(false)
 
   // Load tasks from localStorage on component mount
   useEffect(() => {
@@ -18,18 +19,27 @@ function TaskGenerator() {
     
     if (uncompletedTasks.length === 0) {
       setSelectedTask('Add some tasks or uncheck completed ones!')
-      return
+    } else {
+      const randomIndex = Math.floor(Math.random() * uncompletedTasks.length)
+      setSelectedTask(uncompletedTasks[randomIndex].text)
     }
-    const randomIndex = Math.floor(Math.random() * uncompletedTasks.length)
-    setSelectedTask(uncompletedTasks[randomIndex].text)
+    
+    // Trigger visibility transition
+    setIsVisible(false)
+    setTimeout(() => setIsVisible(true), 50)
+    onTaskSelected?.()
   }
 
   return (
     <div className='task-generator'>
-        <button>Random Task</button>
-        <button onClick={generateRandomTask}>My Task</button>
+        <div className="button-group">
+          <button>Random Task</button>
+          <button onClick={generateRandomTask}>My Task</button>
+        </div>
         <div className="task-display">
-          <p>{selectedTask || 'Click above buttons to get a task'}</p>
+          <p className={isVisible ? 'visible' : ''}>
+            {selectedTask || 'Click above buttons to get a task'}
+          </p>
         </div>
     </div>
   )

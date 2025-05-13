@@ -40,8 +40,10 @@ function AddTask() {
           placeholder="Enter your task"
           className="task-input"
         />
-        <button type="submit" className="submit-button">Add Task</button>
-        <button onClick={() => navigate('/')} className="submit-button">Home</button>
+        <div className="button-group">
+          <button type="submit" className="submit-button">Add Task</button>
+          <button onClick={() => navigate('/')} className="submit-button">Home</button>
+        </div>
       </form>
 
       {tasks.length > 0 && (
