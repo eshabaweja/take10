@@ -1,21 +1,16 @@
 import './App.css'
-import Timer from './components/Timer'
-import TaskGenerator from './components/TaskGenerator'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Home from './components/Home'
+import AddTask from './components/AddTask'
 
 function App() {
   return (
-    <>
-      <h1>Take 10</h1>
-      <p className="read-the-docs">
-        What should you do in this 10 minute break?
-      </p>
-      <TaskGenerator />
-
-      <div className="card">
-        <Timer />
-      </div>
-
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/add-task" element={<AddTask />} />
+      </Routes>
+    </Router>
   )
 }
 
