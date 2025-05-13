@@ -47,16 +47,16 @@ function AddTask() {
       {tasks.length > 0 && (
         <div className="task-list">
           <h3>Your Tasks:</h3>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
+          <ul>
             {tasks.map((taskItem, index) => (
-              <li key={index} style={{ margin: '8px 0' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <li key={index}>
+                <label>
                   <input
                     type="checkbox"
                     checked={taskItem.completed}
                     onChange={() => toggleTask(index)}
                   />
-                  <span style={{ textDecoration: taskItem.completed ? 'line-through' : 'none' }}>
+                  <span className={taskItem.completed ? 'completed' : ''}>
                     {taskItem.text}
                   </span>
                 </label>

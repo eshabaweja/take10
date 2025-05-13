@@ -28,11 +28,9 @@ function TaskGenerator() {
     <div className='task-generator'>
         <button>Random Task</button>
         <button onClick={generateRandomTask}>My Task</button>
-        {selectedTask && (
-          <div className="selected-task">
-            <p>{selectedTask}</p>
-          </div>
-        )}
+        <div className="task-display">
+          <p>{selectedTask || 'Click above buttons to get a task'}</p>
+        </div>
     </div>
   )
 }
