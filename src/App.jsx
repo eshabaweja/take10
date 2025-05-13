@@ -1,15 +1,16 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Timer from './components/Timer'
+import TaskGenerator from './components/TaskGenerator'
 
 function App() {
   return (
     <>
       <h1>Take 10</h1>
       <p className="read-the-docs">
-        Your AI assistant for taking 10 minute breaks
+        What should you do in this 10 minute break?
       </p>
+      <TaskGenerator />
+
       <div className="card">
         <Timer />
       </div>
