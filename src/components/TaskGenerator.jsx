@@ -1,12 +1,40 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function TaskGenerator() {
+  const [tasks, setTasks] = useState([])
+  const [selectedTask, setSelectedTask] = useState(null)
+
+  // Load tasks from localStorage on component mount
+  useEffect(() => {
+    const savedTasks = localStorage.getItem('tasks')
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks))
+    }
+  }, [])
+
+  const generateRandomTask = () => {
+    // Filter out completed tasks
+    const uncompletedTasks = tasks.filter(task => !task.completed)
+    
+    if (uncompletedTasks.length === 0) {
+      setSelectedTask('Add some tasks or uncheck completed ones!')
+      return
+    }
+    const randomIndex = Math.floor(Math.random() * uncompletedTasks.length)
+    setSelectedTask(uncompletedTasks[randomIndex].text)
+  }
+
   return (
     <div className='task-generator'>
         <button>Random Task</button>
-        <button>My Task</button>
+        <button onClick={generateRandomTask}>My Task</button>
+        {selectedTask && (
+          <div className="selected-task">
+            <p>{selectedTask}</p>
+          </div>
+        )}
     </div>
   )
- }
+}
 
 export default TaskGenerator
