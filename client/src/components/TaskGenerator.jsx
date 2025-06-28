@@ -31,7 +31,7 @@ function TaskGenerator({ onTaskSelected }) {
     }
     const data = await response.json();
     setSelectedTask(data.reply);
-    console.log(data.reply);
+    // console.log(data.reply);
     
     // Trigger visibility transition
     setIsVisible(false)

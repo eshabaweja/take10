@@ -15,14 +15,13 @@ router.post('/',async(req,res)=>{
         const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         max_completion_tokens: 20,
-        temperature: 1.7,  
+        temperature: 1,  
         messages: [
-            {"role": "developer", "content": "You are an assistant that generates random exactly 10-minute activities. These activities should be a mix of practical, common ideas and quirky, unusually specific ideas. Each response must be exactly 10 words or less."},
+            {"role": "developer", "content": "No organizing chores. 10 minute, 15 words max. Format <task verb> <unique twist> <optional celebrity or famous character>"},
             {"role": "user", "content": prompt}
         ],
         });
 
-        console.log(completion);
         res.json({ reply: completion.choices[0].message.content });
     }
     catch(error){
