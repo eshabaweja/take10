@@ -1,9 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function TaskGenerator({ onTaskSelected }) {
-  const [tasks, setTasks] = useState([])
-  const [selectedTask, setSelectedTask] = useState(null)
-  const [isVisible, setIsVisible] = useState(false)
+  const [tasks, setTasks] = useState([]);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Load tasks from localStorage on component mount
   useEffect(() => {
@@ -12,6 +15,34 @@ function TaskGenerator({ onTaskSelected }) {
       setTasks(JSON.parse(savedTasks))
     }
   }, [])
+
+  const generateRandomTask = async () => {
+    setLoading(true);
+
+    try {
+      const response = await fetch(` ${BACKEND_URL}/task`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: 'Give me a random task' }),
+    });
+
+    if(!response.ok){
+      throw new Error(`Server error: ${response.statusText}`);
+    }
+    const data = await response.json();
+    setSelectedTask(data.reply);
+    console.log(data.reply);
+    
+    // Trigger visibility transition
+    setIsVisible(false)
+    setTimeout(() => setIsVisible(true), 50)
+    onTaskSelected?.()
+    } catch (error) {
+      setSelectedTask(`Error: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+}
 
   const generateMyTask = () => {
     // Filter out completed tasks
@@ -33,7 +64,7 @@ function TaskGenerator({ onTaskSelected }) {
   return (
     <div className='task-generator'>
         <div className="button-group">
-          <button>Random Task</button>
+          <button onClick={generateRandomTask}>{loading ? 'Generating...' : 'Random Task'}</button>
           <button onClick={generateMyTask}>My Task</button>
         </div>
         <div className="task-display">
