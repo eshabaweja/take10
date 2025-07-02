@@ -20,7 +20,7 @@ function TaskGenerator({ onTaskSelected }) {
     setLoading(true);
 
     try {
-      const response = await fetch(` ${BACKEND_URL}/task`, {
+      const response = await fetch(` /api/task`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt: 'Give me a random task' }),
